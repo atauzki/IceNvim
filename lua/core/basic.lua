@@ -7,7 +7,7 @@ opt.fileencoding = "utf-8"
 local win_height = vim.fn.winheight(0)
 opt.scrolloff = math.floor((win_height - 1) / 2)
 opt.sidescrolloff = math.floor((win_height - 1) / 2)
-
+opt.guicursor = ""
 opt.number = true
 opt.relativenumber = true
 

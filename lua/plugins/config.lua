@@ -1082,7 +1082,6 @@ config["null-ls"] = {
             sources = {
                 formatting.shfmt,
                 formatting.stylua,
-                formatting.csharpier,
                 formatting.prettier.with {
                     filetypes = {
                         "javascript",
