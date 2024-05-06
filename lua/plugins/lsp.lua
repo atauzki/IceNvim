@@ -191,6 +191,7 @@ keymap.mapLsp = {
 }
 
 keymap.cmp = function(cmp)
+    local luasnip = require "luasnip"
     return {
         -- Show completion
         ["<A-.>"] = cmp.mapping(cmp.mapping.complete(), { "i", "c" }),
@@ -205,6 +206,20 @@ keymap.cmp = function(cmp)
             select = true,
             behavior = cmp.ConfirmBehavior.Replace,
         },
+        ["<CR>"] = cmp.mapping(function(fallback)
+            if luasnip.expand_or_jumpable() then
+                luasnip.expand_or_jump()
+            else
+                fallback()
+            end
+        end, { "i", "c" }),
+        ["<S-CR>"] = cmp.mapping(function(fallback)
+            if luasnip.jumpable(-1) then
+                luasnip.jump(-1)
+            else
+                fallback()
+            end
+        end, { "i", "c" }),
         ["<C-u>"] = cmp.mapping(cmp.mapping.scroll_docs(-4), { "i", "c" }),
         ["<C-d>"] = cmp.mapping(cmp.mapping.scroll_docs(4), { "i", "c" }),
     }
