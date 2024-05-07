@@ -206,20 +206,17 @@ keymap.cmp = function(cmp)
             select = true,
             behavior = cmp.ConfirmBehavior.Replace,
         },
-        ["<CR>"] = cmp.mapping(function(fallback)
+        -- just expand snips only, don't trigger omnicomplete.
+        ["<C-N>"] = cmp.mapping(function()
             if luasnip.expand_or_jumpable() then
                 luasnip.expand_or_jump()
-            else
-                fallback()
             end
-        end, { "i", "c" }),
-        ["<S-CR>"] = cmp.mapping(function(fallback)
+        end, { "i", "c", "s" }),
+        ["<C-P>"] = cmp.mapping(function()
             if luasnip.jumpable(-1) then
                 luasnip.jump(-1)
-            else
-                fallback()
             end
-        end, { "i", "c" }),
+        end, { "i", "c", "s" }),
         ["<C-u>"] = cmp.mapping(cmp.mapping.scroll_docs(-4), { "i", "c" }),
         ["<C-d>"] = cmp.mapping(cmp.mapping.scroll_docs(4), { "i", "c" }),
     }
