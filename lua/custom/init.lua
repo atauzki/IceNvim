@@ -4,6 +4,8 @@ Ice.plugins["nvim-transparent"].enabled = false
 -- hide column hints
 vim.opt.colorcolumn = ""
 
+vim.opt.undofile = true
+
 -- limit to 1 line
 vim.opt.cmdheight = 1
 

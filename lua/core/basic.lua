@@ -4,9 +4,12 @@ local opt = vim.opt
 g.encoding = "UTF-8"
 opt.fileencoding = "utf-8"
 
-local win_height = vim.fn.winheight(0)
-opt.scrolloff = math.floor((win_height - 1) / 2)
-opt.sidescrolloff = math.floor((win_height - 1) / 2)
+-- Smarter scrolloff with percentage
+vim.api.nvim_create_autocmd({"VimEnter","VimResized"}, { callback = function ()
+  opt.scrolloff = math.floor((vim.fn.winheight(0) - 1) / 6)
+  opt.sidescrolloff = math.floor((vim.fn.winheight(0) - 1) / 6)
+end})
+
 opt.guicursor = ""
 opt.number = true
 opt.relativenumber = true
