@@ -1100,6 +1100,8 @@ config["null-ls"] = {
                     prefer_local = "node_modules/.bin",
                 },
                 formatting.black,
+                formatting.clang_format,
+                formatting.cmake_format
             },
             diagnostics_format = "[#{s}] #{m}",
         }
