@@ -33,7 +33,7 @@ end
 
 -- IME switching on windows / wsl
 if utils.is_windows() or utils.is_wsl() then
-    local im_select_path = config_path .. "/bin/im-select.exe"
+    local im_select_path = config_path .. "/bin/im-select-mspy.exe"
 
     local im_select_exe = io.open(im_select_path, "r")
     if im_select_exe ~= nil then
@@ -50,9 +50,10 @@ if utils.is_windows() or utils.is_wsl() then
             })
         end
 
-        autocmd("InsertLeave", 1033)
-        autocmd("InsertEnter", 2052)
-        autocmd("VimLeavePre", 2052)
+        autocmd("VimEnter", "英语模式")
+        autocmd("InsertLeave", "英语模式")
+        autocmd("InsertEnter", "中文模式")
+        autocmd("VimLeavePre", "英语模式")
     end
 elseif utils.is_linux() then
     vim.cmd [[
