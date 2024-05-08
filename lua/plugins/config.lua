@@ -63,7 +63,7 @@ config.bufferline = {
     config = function(_, opts)
         vim.api.nvim_create_user_command("BufferLineClose", function(buffer_line_opts)
             local bufnr = 1 * buffer_line_opts.args
-            local buf_is_modified = vim.api.nvim_buf_get_option(bufnr, "modified")
+            local buf_is_modified = vim.api.nvim_get_option_value("modified", { buf = bufnr })
 
             local bdelete_arg
             if bufnr == 0 then
@@ -985,11 +985,11 @@ config["nvim-cmp"] = {
         "hrsh7th/cmp-cmdline",
         "rafamadriz/friendly-snippets",
         "onsails/lspkind-nvim",
-        "tami5/lspsaga.nvim",
+        "nvimdev/lspsaga.nvim",
     },
     event = { "InsertEnter", "CmdlineEnter" },
     config = function()
-        require("luasnip.loaders.from_vscode").lazy_load({paths = vim.fn.stdpath('data') .. "/lazy/friendly-snippets"})
+        require("luasnip.loaders.from_vscode").lazy_load { paths = vim.fn.stdpath "data" .. "/lazy/friendly-snippets" }
         local lspkind = require "lspkind"
         lspkind.init {
             mode = "symbol",
@@ -1064,6 +1064,7 @@ config["nvim-cmp"] = {
 
         local cmp_autopairs = require "nvim-autopairs.completion.cmp"
         cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done { map_char = { tex = "" } })
+        require("lspsaga").setup()
     end,
 }
 
@@ -1101,7 +1102,7 @@ config["null-ls"] = {
                 },
                 formatting.black,
                 formatting.clang_format,
-                formatting.cmake_format
+                formatting.cmake_format,
             },
             diagnostics_format = "[#{s}] #{m}",
         }
