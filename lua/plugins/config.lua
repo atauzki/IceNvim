@@ -633,7 +633,10 @@ config["nvim-tree"] = {
 config["nvim-treesitter"] = {
     "nvim-treesitter/nvim-treesitter",
     build = ":TSUpdate",
-    dependencies = { "hiphish/rainbow-delimiters.nvim" },
+    dependencies = {
+        "hiphish/rainbow-delimiters.nvim",
+        "andymass/vim-matchup",
+    },
     event = "User IceLoad",
     main = "nvim-treesitter",
     opts = {
@@ -670,6 +673,9 @@ config["nvim-treesitter"] = {
             enable = true,
             -- conflicts with flutter-tools.nvim, causing performance issues
             disable = { "dart" },
+        },
+        matchup = {
+            enabled = true,
         },
     },
     config = function(_, opts)

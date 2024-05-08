@@ -74,6 +74,7 @@ Ice.plugins.lualine.opts = {
 Ice.plugins["nvim-treesitter"].opts = {
     ensure_installed = {
         "bibtex",
+        "bash",
         "c",
         "c_sharp",
         "cmake",
@@ -86,14 +87,18 @@ Ice.plugins["nvim-treesitter"].opts = {
         "json",
         "latex",
         "lua",
+        "markdown",
+        "markdown_inline",
         "perl",
         "php",
         "python",
+        "query",
         "ruby",
         "rust",
         "tsx",
         "typescript",
         "vim",
+        "vimdoc",
     },
 }
 
