@@ -92,9 +92,13 @@ if require("core.utils").is_windows() then
     opt.shellslash = true
 end
 
-vim.cmd [[
-    autocmd TermOpen * setlocal nonumber norelativenumber
-]]
+vim.api.nvim_create_autocmd("TermOpen", {
+    pattern = "*",
+    callback = function()
+        vim.opt_local.number = false
+        vim.opt_local.relativenumber = false
+    end
+})
 
 opt.shadafile = "NONE"
 vim.api.nvim_create_autocmd("CmdlineEnter", {
