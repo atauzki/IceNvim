@@ -52,7 +52,7 @@ if utils.is_windows() or utils.is_wsl() then
 
         autocmd("VimEnter", "英语模式")
         autocmd("InsertLeave", "英语模式")
-        autocmd("InsertEnter", "中文模式")
+        -- autocmd("InsertEnter", "中文模式")
         autocmd("VimLeavePre", "英语模式")
     end
 elseif utils.is_linux() then
