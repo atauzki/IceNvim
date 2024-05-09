@@ -63,8 +63,6 @@ utils.get_parent = function(target)
 end
 
 utils.get_root = function()
-    local uv = vim.loop
-
     local default_pattern = {
         ".git",
         "package.json",
@@ -86,7 +84,7 @@ utils.get_root = function()
     local has_found_root = false
 
     while not (has_found_root or parent == nil) do
-        local dir = uv.fs_scandir(parent)
+        local dir = vim.uv.fs_scandir(parent)
 
         if dir == nil then
             break
@@ -95,7 +93,7 @@ utils.get_root = function()
         local file = ""
 
         while file ~= nil do
-            file = uv.fs_scandir_next(dir)
+            file = vim.uv.fs_scandir_next(dir)
             if table.find(pattern, file) then
                 root = parent
                 has_found_root = true
@@ -110,15 +108,15 @@ utils.get_root = function()
 end
 
 utils.is_windows = function()
-    return vim.loop.os_uname().sysname == "Windows_NT"
+    return vim.uv.os_uname().sysname == "Windows_NT"
 end
 
 utils.is_linux = function()
-    return vim.loop.os_uname().sysname == "Linux"
+    return vim.uv.os_uname().sysname == "Linux"
 end
 
 utils.is_wsl = function()
-    return string.find(vim.loop.os_uname().release, "WSL") ~= nil
+    return string.find(vim.uv.os_uname().release, "WSL") ~= nil
 end
 
 -- Maps a group of keymaps with the same opt; if no opt is provided, the default opt is used.
