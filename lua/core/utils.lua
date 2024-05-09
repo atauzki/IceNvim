@@ -1,6 +1,5 @@
 local v = vim.version()
 local version = string.format("%d.%d.%d", v.major, v.minor, v.patch)
-
 local argv = vim.api.nvim_get_vvar "argv"
 local noplugin = false
 for i = 3, #argv, 1 do
@@ -14,6 +13,13 @@ local utils = {
     noplugin = noplugin,
     version = version,
 }
+
+local uv = nil
+if vim.uv ~= nil then
+    uv = vim.uv
+else
+    uv = vim.loop
+end
 
 local ft_group = vim.api.nvim_create_augroup("IceFt", { clear = true })
 
@@ -84,7 +90,7 @@ utils.get_root = function()
     local has_found_root = false
 
     while not (has_found_root or parent == nil) do
-        local dir = vim.uv.fs_scandir(parent)
+        local dir = uv.fs_scandir(parent)
 
         if dir == nil then
             break
@@ -93,7 +99,7 @@ utils.get_root = function()
         local file = ""
 
         while file ~= nil do
-            file = vim.uv.fs_scandir_next(dir)
+            file = uv.fs_scandir_next(dir)
             if table.find(pattern, file) then
                 root = parent
                 has_found_root = true
@@ -108,15 +114,15 @@ utils.get_root = function()
 end
 
 utils.is_windows = function()
-    return vim.uv.os_uname().sysname == "Windows_NT"
+    return uv.os_uname().sysname == "Windows_NT"
 end
 
 utils.is_linux = function()
-    return vim.uv.os_uname().sysname == "Linux"
+    return uv.os_uname().sysname == "Linux"
 end
 
 utils.is_wsl = function()
-    return string.find(vim.uv.os_uname().release, "WSL") ~= nil
+    return string.find(uv.os_uname().release, "WSL") ~= nil
 end
 
 -- Maps a group of keymaps with the same opt; if no opt is provided, the default opt is used.
