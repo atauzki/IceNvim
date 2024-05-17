@@ -490,11 +490,8 @@ config["nvim-transparent"] = {
         })
         -- Enable transparent by default
         local transparent_cache = vim.fn.stdpath "data" .. "/transparent_cache"
-        local f = io.open(transparent_cache, "r")
-        if f ~= nil then
-            f:close()
-        else
-            f = io.open(transparent_cache, "w")
+        if not require("core.utils").file_exists(transparent_cache) then
+            local f = io.open(transparent_cache, "w")
             f:write "true"
             f:close()
         end
@@ -642,10 +639,22 @@ config["nvim-treesitter"] = {
     "nvim-treesitter/nvim-treesitter",
     build = ":TSUpdate",
     dependencies = {
-        "hiphish/rainbow-delimiters.nvim",
-        "andymass/vim-matchup",
+        "hiphish/rainbow-delimiters.nvim", 
+        "andymass/vim-matchup"
     },
-    event = "User IceLoad",
+    -- Do not lazy load if file does not exist
+    --
+    -- Why this is needed:
+    --
+    -- Because nvim-treesitter needs to be loaded early, which is why using "VeryLazy" would not load it in time if we
+    -- open a file directly upon startup. BufRead, on the other hand, loads nvim-treesitter in time for a file but does
+    -- not load it in dashboard, hence doing well with startup time.
+    --
+    -- However, BufRead is not fired for non-existent files. So, if we use `nvim <new-file>`, nvim-treesitter would not
+    -- be loaded for that new file. In this case, the only solution I could see is to prevent lazy loading of the plugin
+    -- altogether.
+    lazy = require("core.utils").file_exists(vim.fn.expand "%:p"),
+    event = "BufRead",
     main = "nvim-treesitter",
     opts = {
         ensure_installed = {
@@ -657,7 +666,10 @@ config["nvim-treesitter"] = {
             "javascript",
             "json",
             "lua",
+            "markdown",
+            "markdown_inline",
             "python",
+            "query",
             "rust",
             "typescript",
             "tsx",
@@ -667,6 +679,13 @@ config["nvim-treesitter"] = {
         highlight = {
             enable = true,
             additional_vim_regex_highlighting = false,
+            disable = function(_, buf)
+                local max_filesize = 100 * 1024
+                local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
+                if ok and stats and stats.size > max_filesize then
+                    return true
+                end
+            end,
         },
         incremental_selection = {
             enable = true,
@@ -1001,7 +1020,7 @@ config["nvim-cmp"] = {
         "onsails/lspkind-nvim",
         "nvimdev/lspsaga.nvim",
     },
-    event = { "InsertEnter", "CmdlineEnter" },
+    event = { "InsertEnter", "CmdlineEnter", "User IceLoad" },
     config = function()
         require("luasnip.loaders.from_vscode").lazy_load { paths = vim.fn.stdpath "data" .. "/lazy/friendly-snippets" }
         local lspkind = require "lspkind"
@@ -1078,7 +1097,12 @@ config["nvim-cmp"] = {
 
         local cmp_autopairs = require "nvim-autopairs.completion.cmp"
         cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done { map_char = { tex = "" } })
-        require("lspsaga").setup()
+
+        require("lspsaga").setup {
+            symbol_in_winbar = {
+                enable = false,
+            },
+        }
     end,
 }
 
