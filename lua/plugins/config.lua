@@ -297,6 +297,13 @@ config["indent-blankline"] = {
     "lukas-reineke/indent-blankline.nvim",
     event = "User IceLoad",
     main = "ibl",
+    version = (function()
+        if vim.version().minor < 10 then
+            return "3.5"
+        else
+            return "*"
+        end
+    end)(),
     opts = {
         exclude = {
             filetypes = {
@@ -1025,7 +1032,6 @@ config["nvim-cmp"] = {
     },
     event = { "InsertEnter", "CmdlineEnter", "User IceLoad" },
     config = function()
-        require("luasnip.loaders.from_vscode").lazy_load { paths = vim.fn.stdpath "data" .. "/lazy/friendly-snippets" }
         local lspkind = require "lspkind"
         lspkind.init {
             mode = "symbol",
@@ -1106,6 +1112,8 @@ config["nvim-cmp"] = {
                 enable = false,
             },
         }
+
+        require("luasnip.loaders.from_vscode").lazy_load { paths = vim.fn.stdpath "data" .. "/lazy/friendly-snippets" }
     end,
 }
 
