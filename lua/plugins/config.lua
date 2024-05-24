@@ -297,13 +297,6 @@ config["indent-blankline"] = {
     "lukas-reineke/indent-blankline.nvim",
     event = "User IceLoad",
     main = "ibl",
-    version = (function()
-        if vim.version().minor < 10 then
-            return "3.5"
-        else
-            return "*"
-        end
-    end)(),
     opts = {
         exclude = {
             filetypes = {
@@ -393,8 +386,13 @@ config.neogit = {
     dependencies = "nvim-lua/plenary.nvim",
     main = "neogit",
     opts = {
+        disable_hint = true,
         status = {
             recent_commit_count = 30,
+        },
+        commit_editor = {
+            kind = "auto",
+            show_staged_diff = false,
         },
     },
     keys = {
@@ -600,16 +598,15 @@ config["nvim-tree"] = {
         git = {
             enable = false,
         },
-        update_cwd = true,
         update_focused_file = {
             enable = true,
-            update_cwd = true,
         },
         filters = {
             dotfiles = false,
             custom = { "node_modules", ".git/" },
             exclude = { ".gitignore" },
         },
+        respect_buf_cwd = true,
         view = {
             width = 30,
             side = "left",
