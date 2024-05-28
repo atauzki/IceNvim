@@ -3,30 +3,31 @@ local utils = require "core.utils"
 local config_path = string.gsub(vim.fn.stdpath "config", "\\", "/")
 
 -- Yanking on windows / wsl
-local clip_path = config_path .. "/bin/uclip.exe"
-if not require("core.utils").file_exists(clip_path) then
-    local root
-    if utils.is_windows() then
-        root = "C:"
-    else
-        root = "/mnt/c"
-    end
-    clip_path = root .. "/Windows/System32/clip.exe"
-end
-
-if utils.is_windows() or utils.is_wsl() then
-    vim.cmd(string.format(
-        [[
-        augroup fix_yank
-            autocmd!
-            autocmd TextYankPost * if v:event.operator ==# 'y' | call system('%s', @0) | endif
-        augroup END
-        ]],
-        clip_path
-    ))
-elseif utils.is_linux() then
-    vim.cmd "set clipboard+=unnamedplus"
-end
+-- makes WSL clip broken, commented out.
+-- local clip_path = config_path .. "/bin/uclip.exe"
+-- if not require("core.utils").file_exists(clip_path) then
+--     local root
+--     if utils.is_windows() then
+--         root = "C:"
+--     else
+--         root = "/mnt/c"
+--     end
+--     clip_path = root .. "/Windows/System32/clip.exe"
+-- end
+--
+-- if utils.is_windows() or utils.is_wsl() then
+--     vim.cmd(string.format(
+--         [[
+--         augroup fix_yank
+--             autocmd!
+--             autocmd TextYankPost * if v:event.operator ==# 'y' | call system('%s', @0) | endif
+--         augroup END
+--         ]],
+--         clip_path
+--     ))
+-- elseif utils.is_linux() then
+--     vim.cmd "set clipboard+=unnamedplus"
+-- end
 
 -- IME switching on windows / wsl
 if utils.is_windows() or utils.is_wsl() then

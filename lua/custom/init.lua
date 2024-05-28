@@ -9,6 +9,8 @@ vim.opt.undofile = true
 -- limit to 1 line
 vim.opt.cmdheight = 1
 
+vim.opt.mousemodel = "extend"
+
 Ice.lsp.ensure_installed = {
     "autopep8",
     "black",
